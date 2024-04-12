@@ -117,12 +117,9 @@ void Cloth::simulate(double frames_per_sec, double simulation_steps, ClothParame
     external_force += mass * external_accelerations[i];
   }
 
-<<<<<<< HEAD
   // Add wind force
   external_force += cp->wind;
 
-=======
->>>>>>> 86c05b34c1e5097e8013cdb7594efe46849d0a9f
   for (int i = 0; i < point_masses.size(); i++) {
     PointMass* p = &point_masses[i];
     p->forces = external_force;
