@@ -196,7 +196,7 @@ void Cloth::simulate(double frames_per_sec, double simulation_steps, ClothParame
         Vector3D normal = pointMass.normal();
 
         // Strength of the wind
-        float c_wind = 0.2;
+        float c_wind = 0.7;
 
         // Maybe put in clothParams
         // Used this formula: F_wind(i,j) = C_wind[n_i,j∗(v_wind − v_i,j)]n_i,j
