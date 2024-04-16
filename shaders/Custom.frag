@@ -40,6 +40,19 @@ float h(vec2 uv) {
   return height;
 }
 
+uniform vec3 u_fog_color;
+
+// Function to calculate fog factor based on distance
+float getFogFactor(float distanceToCamera) {
+  const float fogStart = 10.0; 
+  const float fogEnd = 20.0; 
+
+  if (distanceToCamera >= fogEnd) return 1;
+  if (distanceToCamera <= fogStart) return 0;
+
+  return (fogEnd - distanceToCamera) / (fogEnd - fogStart);
+}
+
 void main() {
   // Your awesome shader here!
   // out_color = (vec4(1, 1, 1, 0) + v_normal) / 2;
@@ -47,7 +60,7 @@ void main() {
 
   const float backscatter = 0.25;
   const float edginess = 8.0;
-  vec3 sheen = vec3(0.5, 0.5, 0.5); // sheen is color of highlight --> change to fog?
+  vec3 sheen = vec3(0.5, 0.5, 0.5); // sheen is color of highlight --> change to
   const float roughness = 0.15;
 
   //bump
@@ -102,5 +115,19 @@ void main() {
   // illumination is sheen * diffuse
   // edginess is only from the visible part
 
+  // Fog
   out_color = vec4((ka * illum) + (kd*diffuse) + (ks*shiny), 1);
+
+  // Calculate distance between fragment and camera position
+  float distanceToCamera = length(v_position.xyz - u_cam_pos);
+
+  // Calculate fog factor based on distance
+  float fogFactor = getFogFactor(distanceToCamera);
+
+  // Mix between original color and fog color based on fog factor
+  vec3 foggedColor = mix(out_color.rgb, u_fog_color, fogFactor);
+
+  // Fogged color
+  out_color.rgb = foggedColor;
+  out_color.a = 1.0;
 }
